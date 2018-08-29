@@ -1,0 +1,12 @@
+atomicwrites==1.2.0
+attrs==18.1.0
+colorama==0.3.9
+falcon==1.4.1
+gunicorn==19.9.0
+more-itertools==4.3.0
+pluggy==0.7.1
+py==1.6.0
+pytest==3.7.3
+python-mimeparse==1.6.0
+six==1.11.0
+waitress==1.1.0
