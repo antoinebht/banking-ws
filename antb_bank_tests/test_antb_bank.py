@@ -12,7 +12,10 @@ def client():
 
 def test_bank_accounts(client):
     msg = {
-        'content': "Hello World"
+        'accounts': [
+            {'id': 1, 'name': "CCHQ1"},
+            {'id': 2, 'name': "CCHQ2"}
+        ]
     }
 
     response = client.simulate_get('/bank/accounts')
