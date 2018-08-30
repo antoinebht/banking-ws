@@ -45,7 +45,7 @@ class Account(object):
             resp.body = json.dumps(acc, ensure_ascii=False)
             resp.status = falcon.HTTP_CREATED
 
-class Operation(object):
+class Operations(object):
     def __init__(self):
             self.db = storage.AccountsStorage()
 
@@ -64,3 +64,13 @@ class Operation(object):
             msg = operation
             resp.body = json.dumps(operation, ensure_ascii=False)
             resp.status = falcon.HTTP_CREATED
+
+class Operation(object):
+    def __init__(self):
+            self.db = storage.AccountsStorage()
+
+    def on_put(self, req, resp, account, period_id, operation_id):
+        pass
+
+    def on_delete(self, req, resp, account, period_id, operation_id):
+        pass
