@@ -25,7 +25,7 @@ def test_bank_accounts(client):
     assert response.status == falcon.HTTP_OK
 
 
-def test_bank_account(client):
+def test_bank_account_get(client):
     msg = {
         'id': 1, 
         'name': "CCHQ1",
@@ -67,3 +67,19 @@ def test_bank_account(client):
     res = json.loads(response.content)
     assert res == msg
     assert response.status == falcon.HTTP_OK
+
+
+def test_bank_account_post(client):
+    name = 'CCHQ2'
+    response = client.simulate_post(
+        '/bank/accounts/'+name
+    )
+    res = json.loads(response.content)
+    assert response.status == falcon.HTTP_CREATED
+    assert not res == {}
+    assert res['name'] == name
+
+    response = client.simulate_get('/bank/accounts/'+str(res['id']))
+    res2 = json.loads(response.content)
+    assert response.status == falcon.HTTP_OK
+    assert res == res2

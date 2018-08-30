@@ -72,3 +72,8 @@ class AccountsStorage(object):
             if account['id'] == id:
                 return account
         return {}
+
+    def addAccount(self, name):
+        account = {'id': len(data)+1, 'name' : name}
+        data.append(account)
+        return account
