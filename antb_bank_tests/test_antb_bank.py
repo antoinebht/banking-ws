@@ -83,3 +83,27 @@ def test_bank_account_post(client):
     res2 = json.loads(response.content)
     assert response.status == falcon.HTTP_OK
     assert res == res2
+
+
+def test_bank_operation_post(client):
+    msg = { 'date': '2018-07-26', 'amount': 1449.56, 'tags':["INITIAL_VALUE"], 'checked': True }
+
+    response = client.simulate_post(
+        '/bank/accounts/10/periods/1/operations',
+        body = json.dumps(msg, ensure_ascii=False),
+        headers={'content-type': 'application/json'}
+    )
+    assert response.status == falcon.HTTP_NOT_FOUND
+    
+
+    response = client.simulate_post(
+        '/bank/accounts/1/periods/1/operations',
+        body = json.dumps(msg, ensure_ascii=False)
+    )
+    res = json.loads(response.content)
+    assert response.status == falcon.HTTP_CREATED
+    assert res['id'].isdigit()
+    assert res['date'] == msg['date']
+    assert res['amount'] == msg['amount']
+    assert res['tags'] == msg['tags']
+    assert res['checked'] == msg['checked']

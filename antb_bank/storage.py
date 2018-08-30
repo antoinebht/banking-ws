@@ -50,11 +50,11 @@ data = [
                 'id': 4,
                 'name': "period2",
                 'operations' : [
-                    { 'id': 19, 'date': "2018-06-31", 'amount':  -540, 'tags' : ["RENT"], 'checked': True}, 
-                    { 'id': 20, 'date': "2018-07-01", 'amount': 84.85, 'tags' : ["HELP", "PRIME_EMPLOI"], 'checked': False}, 
-                    { 'id': 21, 'date': "2018-07-01", 'amount':  -7.6, 'tags' : ["HOBBIES", "CINEMA"], 'checked': True}, 
-                    { 'id': 22, 'date': "2018-07-02", 'amount':  -5.6, 'tags' : ["FOOD", "SANDWICH"], 'checked': True}, 
-                    { 'id': 23, 'date': "2018-07-08", 'amount':  -250, 'tags' : ["SAVING", "LIVA"], 'checked': False}, 
+                    { 'id': 19, 'date': "2018-06-31", 'amount':    -540, 'tags' : ["RENT"], 'checked': True}, 
+                    { 'id': 20, 'date': "2018-07-01", 'amount':   84.85, 'tags' : ["HELP", "PRIME_EMPLOI"], 'checked': False}, 
+                    { 'id': 21, 'date': "2018-07-01", 'amount':    -7.6, 'tags' : ["HOBBIES", "CINEMA"], 'checked': True}, 
+                    { 'id': 22, 'date': "2018-07-02", 'amount':    -5.6, 'tags' : ["FOOD", "SANDWICH"], 'checked': True}, 
+                    { 'id': 23, 'date': "2018-07-08", 'amount':    -250, 'tags' : ["SAVING", "LIVA"], 'checked': False}, 
                     { 'id': 24, 'date': "2018-07-08", 'amount':  -50.00, 'tags' : ["SAVING", "PEL"], 'checked': False}, 
                 ]
             }
@@ -77,3 +77,14 @@ class AccountsStorage(object):
         account = {'id': len(data)+1, 'name' : name}
         data.append(account)
         return account
+
+    def addOperation(self, acount_id, period_id, date, amount, tags, checked):
+        account = getAccount(account_id)
+        for period in account['periods'] :
+            if period['id'] == period_id :
+                operation = { 'id': 24, 'date': date, 'amount':  amount, 'tags' : tags, 'checked': checked}
+                period['operations'].append(operation)
+                return operation
+        return {}
+
+        

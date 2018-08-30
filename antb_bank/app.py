@@ -5,4 +5,5 @@ from . import resources
 
 def register_app(api):
     api.add_route('/bank/accounts', resources.Accounts())
-    api.add_route('/bank/accounts/{name}', resources.Account())
+    api.add_route('/bank/accounts/{account}', resources.Account())
+    api.add_route('/bank/accounts/{account}/periods/{period_id}/operations', resources.Operation())
