@@ -90,8 +90,8 @@ class AccountsStorage(object):
         data.append(account)
         return account
 
-    def addOperation(self, acount_id, period_id, date, amount, tags, checked):
-        account = getAccount(account_id)
+    def addOperation(self, account_id, period_id, date, amount, tags, checked):
+        account = self.getAccount(account_id)
         for period in account['periods'] :
             if period['id'] == period_id :
                 operation = { 'id': 24, 'date': date, 'amount':  amount, 'tags' : tags, 'checked': checked}
