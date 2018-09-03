@@ -1,15 +1,12 @@
 import falcon
 import json
+from falcon_cors import CORS
 
-class CorsMiddleware(object):
-    def process_request(self, request, res):
-        res.set_header('Access-Control-Allow-Origin', '*')
-        res.set_header('Access-Control-Allow-Methods', 'DELETE,GET,HEAD,PATCH,POST,PUT')
-        res.set_header('Access-Control-Expose-Headers', 'auth')
-        res.set_header('Access-Control-Allow-Headers', 'auth')
+cors = CORS(allow_origins_list=['http://localhost:4200'],
+            allow_all_headers=True,
+            allow_all_methods=True)
 
-
-api = app = falcon.API(middleware=[CorsMiddleware()])
+api = app = falcon.API(middleware=[cors.middleware])
 
 
 import antb_bank.app
