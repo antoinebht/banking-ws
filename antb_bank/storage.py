@@ -3,6 +3,12 @@ data = [
     {
         'id': 1, 
         'name': "CCHQ1",
+        'tagColors' : {
+            'INITIAL_VALUE': "badge-info",
+            'SAVING': "badge-success",
+            'CAR': "badge-warning",
+            'HOBBIES': "badge-warning"
+        },
         'periods' : [
             {
                 'id': 1,
@@ -33,6 +39,12 @@ data = [
     {
         'id': 2, 
         'name': "CCHQ2",
+        'tagColors' : {
+            'INITIAL_VALUE': "badge-info",
+            'SAVING': "badge-success",
+            'CAR': "badge-warning",
+            'HOBBIES': "badge-warning"
+        },
         'periods' : [
             {
                 'id': 3,
