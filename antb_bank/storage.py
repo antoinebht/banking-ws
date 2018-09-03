@@ -99,4 +99,14 @@ class AccountsStorage(object):
                 return operation
         return {}
 
+    def updateOperation(self, account_id, period_id, operation_id, date, amount, tags, checked):
+        account = self.getAccount(account_id)
+        for period in account['periods'] :
+            if period['id'] == period_id :
+                for operation in period['operations'] :
+                    if operation['id'] == operation_id :
+                        operation['id'] = { 'id': operation_id, 'date': date, 'amount':  amount, 'tags' : tags, 'checked': checked}
+                        return operation
+        return {}
+
         
