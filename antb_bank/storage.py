@@ -48,7 +48,7 @@ data = [
         'periods' : [
             {
                 'id': 3,
-                'name': "period1",
+                'name': "period3",
                 'operations' : [
                     { 'id': 13, 'date': "2018-06-26", 'amount': -123.26, 'tags' : ["INITIAL_VALUE"], 'checked': True}, 
                     { 'id': 14, 'date': "2018-06-27", 'amount':   26.08, 'tags' : ["REFUND", "HEALTH"], 'checked': False}, 
@@ -60,7 +60,7 @@ data = [
             },
             {
                 'id': 4,
-                'name': "period2",
+                'name': "period4",
                 'operations' : [
                     { 'id': 19, 'date': "2018-06-31", 'amount':    -540, 'tags' : ["RENT"], 'checked': True}, 
                     { 'id': 20, 'date': "2018-07-01", 'amount':   84.85, 'tags' : ["HELP", "PRIME_EMPLOI"], 'checked': False}, 
