@@ -103,10 +103,27 @@ class AccountsStorage(object):
         account = self.getAccount(account_id)
         for period in account['periods'] :
             if period['id'] == period_id :
-                for operation in period['operations'] :
+                for i in range(0,len(period['operations'])) :
+                    operation = period['operations'][i]
                     if operation['id'] == operation_id :
-                        operation['id'] = { 'id': operation_id, 'date': date, 'amount':  amount, 'tags' : tags, 'checked': checked}
+                        period['operations'][i] = { 'id': operation_id, 'date': date, 'amount':  amount, 'tags' : tags, 'checked': checked}
                         return operation
         return {}
 
-        
+    def deleteOperation(self, account_id, period_id, operation_id) :
+        def findOperation(operations, id):
+            for i in range(0,len(operations)) :
+                if operations[i]['id'] == id :
+                    return operations[i]
+            return -1
+
+        account = self.getAccount(account_id)
+        for period in account['periods'] :
+            if period['id'] == period_id :
+                operation = findOperation(period['operations'], operation_id)
+                if operation == -1:
+                    return False
+                else:
+                    period['operations'].remove(operation)
+                    return True
+                    

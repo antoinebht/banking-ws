@@ -113,4 +113,18 @@ class Operation(object):
             resp.status = falcon.HTTP_OK
 
     def on_delete(self, req, resp, account, period_id, operation_id):
-        pass
+        if not account.isdigit() or not period_id.isdigit() or not operation_id.isdigit():
+            resp.body = ""
+            resp.status = falcon.HTTP_BAD_REQUEST
+            return 
+        account = int(account)
+        period_id = int(period_id)
+        operation_id = int(operation_id)
+        
+        operation = self.db.deleteOperation(account, period_id, operation_id)
+        if operation == False :
+            resp.body = ""
+            resp.status = falcon.HTTP_NOT_FOUND
+        else :
+            resp.body = ""
+            resp.status = falcon.HTTP_OK
