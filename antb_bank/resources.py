@@ -1,12 +1,12 @@
 import json
 import re
 import falcon
-from . import storage
+from . import storage_db
 
 class Accounts(object):
 
     def __init__(self):
-        self.db = storage.AccountsStorage()
+        self.db = storage_db.AccountsStorage()
 
     def on_get(self, req, resp):
         msg = self.db.getAccounts()
@@ -17,7 +17,7 @@ class Accounts(object):
 class Account(object):
 
     def __init__(self):
-        self.db = storage.AccountsStorage()
+        self.db = storage_db.AccountsStorage()
 
     def on_get(self, req, resp, account):
         if not account.isdigit() :
@@ -45,7 +45,7 @@ class Account(object):
 
 class Operations(object):
     def __init__(self):
-            self.db = storage.AccountsStorage()
+            self.db = storage_db.AccountsStorage()
 
     def on_post(self, req, resp, account, period_id):
         if not account.isdigit() or not period_id.isdigit() :
@@ -79,7 +79,7 @@ class Operations(object):
 
 class Operation(object):
     def __init__(self):
-            self.db = storage.AccountsStorage()
+            self.db = storage_db.AccountsStorage()
 
     def on_put(self, req, resp, account, period_id, operation_id):
         if not account.isdigit() or not period_id.isdigit() or not operation_id.isdigit():
