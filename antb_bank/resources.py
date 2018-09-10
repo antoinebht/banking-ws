@@ -9,9 +9,14 @@ class Accounts(object):
         self.db = storage_db.AccountsStorage()
 
     def on_get(self, req, resp):
-        msg = self.db.getAccounts()
-        resp.body = json.dumps(msg, ensure_ascii=False)
-        resp.status = falcon.HTTP_200
+        accounts = self.db.getAccounts()
+        if accounts :
+            resp.body = json.dumps(accounts, ensure_ascii=False)
+            resp.status = falcon.HTTP_200
+        else:
+            resp.body = ""
+            resp.status = falcon.HTTP_BAD_REQUEST
+
 
 
 class Account(object):

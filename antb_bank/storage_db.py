@@ -5,14 +5,35 @@ class AccountsStorage(object):
     def __init__(self):
         self.db = './antb_bank/db/data.db'
 
+    def log(self, msg):
+        print("ERR : "+msg)
+
+    def query(self, query, *args):
+        con = None
+        data = None
+        
+        try:
+            con = sqlite3.connect(self.db)
+            cur = con.cursor()
+            cur.execute(query, tuple(args))
+            data = cur.fetchall()
+            if not data:
+                con.commit()
+        except sqlite3.Error as e:
+            self.log.error("Database error: %s" % e)
+        except Exception as e:
+            self.log.error("Exception in _query: %s" % e)
+        finally:
+            if con:
+                con.close()
+        return (cur.lastrowid, data) 
 
     def getAccounts(self) :
-        connection = sqlite3.connect(self.db)
-        c = connection.cursor()
         req = 'SELECT id, name from accounts WHERE deleted=0'
-        res= [{'id': row[0], 'name' : row[1]} for row in c.execute(req)]
-        connection.close()
-        return res
+        data = self.query(req)
+        if not data or not data[1]:
+            return None
+        return [{'id': row[0], 'name' : row[1]} for row in data[1]]
 
     def getAccount(self, id):
         connection = sqlite3.connect(self.db)
@@ -20,15 +41,9 @@ class AccountsStorage(object):
         req = 'SELECT id, name from accounts WHERE deleted=0 and id='+str(id)
         row = c.execute(req).fetchone()
         if row == None:
-            return{}
+            return {}
         
-        res = {'id': row[0], 'name' : row[1], 'periods':self.getPeriodsForAccount(row[0]),'tagColors' : {
-            'INITIAL_VALUE': "badge-info",
-            'SAVING': "badge-success",
-            'CAR': "badge-warning",
-            'HOBBIES': "badge-warning"
-        }}
-
+        res = {'id': row[0], 'name' : row[1], 'periods': self.getPeriodsForAccount(row[0])}
         connection.close()
         return res
 
@@ -70,27 +85,25 @@ class AccountsStorage(object):
         return res
 
     def addAccount(self, name):
-        account = {'id': len(data)+1, 'name' : name}
-        data.append(account)
+        connection = sqlite3.connect(self.db)
+        cursor = connection.cursor()
+        req = "INSERT INTO accounts (name) VALUES (?)"
+        result = cursor.execute(req, (name))
+        account = {'id': result.lastrowid, 'name' : name}
         return account
 
     def addOperation(self, account_id, period_id, date, amount, tags, checked):
-        print("test")
         connection = sqlite3.connect(self.db)
-        c = connection.cursor()
-        check = 1 if checked else 0
-        req = "INSERT INTO operations (date, amount, checked, period_id) VALUES ('"+str(date)+"',"+str(amount)+","+str(check)+","+str(period_id)+")"
-        r = c.execute(req)
-        id = r.lastrowid
-        print(">>"+str(id))
-        req = "INSERT INTO period_operations (operation_id, period_id) VALUES ("+str(id)+","+str(period_id)+")"
-        c.execute(req)
+        cursor = connection.cursor()
+        req = "INSERT INTO operations (date, amount, checked, period_id) VALUES (?,?,?,?)"
+        result = cursor.execute(req, (date, amount, tags, 1 if checked else 0))
+        
+        req = "INSERT INTO period_operations (operation_id, period_id) VALUES (?,?)"
+        cursor.execute(req, (result.lastrowid, period_id))
         connection.commit()
         connection.close()
-        self.addOperationTags(r.lastrowid, tags)
-
-
-        return {'id':id, 'date':date, 'amount':amount, 'checked': checked, 'tags': tags}
+        self.addOperationTags(result.lastrowid, tags)
+        return {'id':result.lastrowid, 'date':date, 'amount':amount, 'checked': checked, 'tags': tags}
 
 
     def addOperationTags(self, operation_id, tags):
