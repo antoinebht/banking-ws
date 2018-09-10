@@ -141,27 +141,22 @@ class AccountsStorage(object):
 
     def updateOperation(self, account_id, period_id, operation_id, date, amount, tags, checked):
         check = 1 if checked else 0
+        req = "UPDATE operations SET date=?, amount=?, checked=? WHERE id=?"
+        data = self.query(req, date, amount, 1 if checked else 0, operation_id)
 
-        connection = sqlite3.connect(self.db)
-        c = connection.cursor()
-        req = "UPDATE operations SET date='"+str(date)+"', amount="+str(amount)+", checked='"+str(check)+"' WHERE id="+str(operation_id)
-        id = c.execute(req).lastrowid
-        connection.commit()
-        connection.close()
-        if id != -1:
+        if not data:
+            return None
+            
+        if data[0] != -1:
             self.addOperationTags(operation_id, tags)
             return {'id':operation_id, 'date':date, 'amount':amount, 'checked': checked, 'tags': tags}  
-        return {}
+        return None
 
     def deleteOperation(self, account_id, period_id, operation_id) :
-        connection = sqlite3.connect(self.db)
-        c = connection.cursor()
-        req = "DELETE FROM operations WHERE id="+str(operation_id)
-        c.execute(req)
-        req = "DELETE FROM operation_tags WHERE operation_id="+str(operation_id)
-        c.execute(req)
-        req = "DELETE FROM period_operations WHERE operation_id="+str(operation_id)+" AND period_id="+str(period_id)
-        c.execute(req)
-        connection.commit()
-        connection.close()
+        req = "DELETE FROM operations WHERE id=?"
+        self.query(req, operation_id)
+        req = "DELETE FROM operation_tags WHERE operation_id=?"
+        self.query(req, operation_id)
+        req = "DELETE FROM period_operations WHERE operation_id=? AND period_id=?"
+        self.query(req, operation_id, period_id)
                     
