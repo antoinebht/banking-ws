@@ -31,12 +31,11 @@ class Account(object):
             return 
 
         acc = self.db.getAccount(int(account))
-        if acc == {} :
+        if not acc:
             resp.body = ""
             resp.status = falcon.HTTP_NOT_FOUND
         else :
-            msg = acc
-            resp.body = json.dumps(msg, ensure_ascii=False)
+            resp.body = json.dumps(acc, ensure_ascii=False)
             resp.status = falcon.HTTP_OK
 
     def on_post(self, req, resp, account) :
